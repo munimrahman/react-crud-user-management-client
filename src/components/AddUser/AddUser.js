@@ -1,9 +1,10 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import swal from 'sweetalert';
 
 const AddUser = () => {
-    const { register, errors, handleSubmit } = useForm();
+    const { register, reset, handleSubmit } = useForm();
     const onSubmit = (data) => {
         fetch('http://localhost:5000/users', {
             method: "POST",
@@ -11,7 +12,16 @@ const AddUser = () => {
             body: JSON.stringify(data)
         })
             .then(res => res.json())
-            .then(data => console.log(data))
+            .then(data => {
+                if (data.insertedId) {
+                    swal({
+                        title: "Successfully Added User!",
+                        icon: "success",
+                        button: "OK!",
+                    });
+                }
+            })
+        reset()
     };
     return (
         <div className="d-flex justify-content-center mt-3">

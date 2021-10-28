@@ -1,12 +1,50 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
+import { useParams } from 'react-router';
+import swal from 'sweetalert';
 
 const UpdateUser = () => {
-    const { register, errors, handleSubmit } = useForm();
+    const { userID } = useParams();
+    const { register, handleSubmit } = useForm();
+    const [user, setUser] = useState({ name: '', email: '', mobile: '' });
+    useEffect(() => {
+        fetch(`http://localhost:5000/users/${userID}`)
+            .then(res => res.json())
+            .then(data => setUser(data))
+    }, [])
     const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+        fetch(`http://localhost:5000/users/${userID}`, {
+            method: "PUT",
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.modifiedCount > 0) {
+                    swal({
+                        title: "Updated User Successfully!",
+                        icon: "success",
+                        button: "OK",
+                    });
+                }
+            })
     };
+    const handleNameChange = e => {
+        const updatedName = e.target.value;
+        const updatedUser = { name: updatedName, email: user.email, mobile: user.mobile }
+        setUser(updatedUser)
+    }
+    const handleEmailChange = e => {
+        const updatedEmail = e.target.value;
+        const updatedUser = { name: user.name, email: updatedEmail, mobile: user.mobile }
+        setUser(updatedUser)
+    }
+    const handleMobileChange = e => {
+        const updatedMobile = e.target.value;
+        const updatedUser = { name: user.name, email: user.email, mobile: updatedMobile }
+        setUser(updatedUser)
+    }
     return (
         <div className="d-flex justify-content-center mt-3">
             <div className="w-50 mt-3">
@@ -16,7 +54,7 @@ const UpdateUser = () => {
                     </Link>
                 </div>
                 <div className="text-center">
-                    <h3>Update UserName</h3>
+                    <h3>Update <span className="text-primary">{user?.name}</span></h3>
                     <p className="m-0">Use The Below Form to Update a User</p>
                 </div>
                 <div className="d-flex justify-content-center">
@@ -28,6 +66,8 @@ const UpdateUser = () => {
                                 type="text"
                                 {...register("name", { required: true, maxLength: 80 })}
                                 placeholder="Your Name"
+                                value={user?.name}
+                                onChange={handleNameChange}
                             />
                         </div>
                         <div className="mb-2">
@@ -39,6 +79,8 @@ const UpdateUser = () => {
                                     required: true
                                 })}
                                 placeholder="Your Email"
+                                value={user?.email}
+                                onChange={handleEmailChange}
                             />
                         </div>
                         <div className="mb-3">
@@ -52,6 +94,8 @@ const UpdateUser = () => {
                                     minLength: 8
                                 })}
                                 placeholder="Your Mobile Number"
+                                value={user?.mobile}
+                                onChange={handleMobileChange}
                             />
                         </div>
                         <div className="text-center">

@@ -18,7 +18,7 @@ function App() {
           <Route exact path="/add-user">
             <AddUser></AddUser>
           </Route>
-          <Route exact path="/update-user">
+          <Route exact path="/update/:userID">
             <UpdateUser></UpdateUser>
           </Route>
         </Switch>

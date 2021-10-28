@@ -1,14 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Table } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 const Home = () => {
+    const [users, setUsers] = useState();
+    useEffect(() => {
+        fetch('http://localhost:5000/users')
+            .then(res => res.json())
+            .then(data => setUsers(data))
+    }, [])
+    const handleDelete = id => {
+        fetch(`http://localhost:5000/users/${id}`, {
+            method: "DELETE",
+            headers: { 'content-type': 'application/json' }
+        })
+            .then(res => res.json())
+            .then(data => {
+                if (data.deletedCount > 0) {
+                    alert('User Deleted Successfully!')
+                }
+                const newUsers = users.filter(user => user._id !== id)
+                setUsers(newUsers)
+            })
+    }
     return (
         <div className="d-flex justify-content-center mt-3">
             <div className="w-50 mt-3">
                 <Link to="/add-user">
                     <button className="add-user text-primary fw-bold">
-                        <i class="fas fa-user-plus me-2"></i>
+                        <i className="fas fa-user-plus me-2"></i>
                         Add User
                     </button>
                 </Link>
@@ -23,66 +43,20 @@ const Home = () => {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>Munim Rahman</td>
-                            <td>munimrh@gmail.com</td>
-                            <td>01929645146</td>
-                            <td className="text-center">
-                                <Link to="/update-user">
-                                    <button className="mx-1 btn btn-success shadow-none py-1"><i class="fas fa-user-edit"></i></button>
-                                </Link>
-                                <button className="mx-1 btn btn-danger shadow-none py-1"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td className="text-center">
-                                <Link to="/update-user">
-                                    <button className="mx-1 btn btn-success shadow-none py-1"><i class="fas fa-user-edit"></i></button>
-                                </Link>
-                                <button className="mx-1 btn btn-danger shadow-none py-1"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>3</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td className="text-center">
-                                <Link to="/update-user">
-                                    <button className="mx-1 btn btn-success shadow-none py-1"><i class="fas fa-user-edit"></i></button>
-                                </Link>
-                                <button className="mx-1 btn btn-danger shadow-none py-1"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>4</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td className="text-center">
-                                <Link to="/update-user">
-                                    <button className="mx-1 btn btn-success shadow-none py-1"><i class="fas fa-user-edit"></i></button>
-                                </Link>
-                                <button className="mx-1 btn btn-danger shadow-none py-1"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>5</td>
-                            <td>Jacob</td>
-                            <td>Thornton</td>
-                            <td>@fat</td>
-                            <td className="text-center">
-                                <Link to="/update-user">
-                                    <button className="mx-1 btn btn-success shadow-none py-1"><i class="fas fa-user-edit"></i></button>
-                                </Link>
-                                <button className="mx-1 btn btn-danger shadow-none py-1"><i class="fas fa-trash-alt"></i></button>
-                            </td>
-                        </tr>
+                        {
+                            users?.map((user, index) => <tr key={user._id}>
+                                <td>{index + 1}</td>
+                                <td>{user.name}</td>
+                                <td>{user.email}</td>
+                                <td>{user.mobile}</td>
+                                <td className="text-center">
+                                    <Link to="/update-user">
+                                        <button className="mx-1 btn btn-success shadow-none py-1"><i className="fas fa-user-edit"></i></button>
+                                    </Link>
+                                    <button onClick={() => handleDelete(user._id)} className="mx-1 btn btn-danger shadow-none py-1"><i className="fas fa-trash-alt"></i></button>
+                                </td>
+                            </tr>)
+                        }
                     </tbody>
                 </Table>
                 <div className="mt-4 text-center">

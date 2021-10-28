@@ -5,14 +5,20 @@ import { useForm } from "react-hook-form";
 const AddUser = () => {
     const { register, errors, handleSubmit } = useForm();
     const onSubmit = (data) => {
-        alert(JSON.stringify(data));
+        fetch('http://localhost:5000/users', {
+            method: "POST",
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.json())
+            .then(data => console.log(data))
     };
     return (
         <div className="d-flex justify-content-center mt-3">
             <div className="w-50 mt-3">
                 <div className="text-start mb-2">
                     <Link to="/" className="text-decoration-none">
-                        <span><i class="fas fa-angle-double-left me-1"></i>All User</span>
+                        <span><i className="fas fa-angle-double-left me-1"></i>All User</span>
                     </Link>
                 </div>
                 <div className="text-center">

@@ -12,7 +12,7 @@ const UpdateUser = () => {
             <div className="w-50 mt-3">
                 <div className="text-start mb-2">
                     <Link to="/" className="text-decoration-none">
-                        <span><i class="fas fa-angle-double-left me-1"></i>All User</span>
+                        <span><i className="fas fa-angle-double-left me-1"></i>All User</span>
                     </Link>
                 </div>
                 <div className="text-center">

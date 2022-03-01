@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { useForm } from "react-hook-form";
 import swal from 'sweetalert';
+import countryList from 'react-select-country-list'
 
 const AddUser = () => {
     const { register, reset, handleSubmit } = useForm();
@@ -44,6 +45,15 @@ const AddUser = () => {
                                 type="text"
                                 {...register("name", { required: true, maxLength: 80 })}
                                 placeholder="Your Name"
+                            />
+                        </div>
+                        <div className="mb-2">
+                            <label className="mb-2">User Id</label> <br />
+                            <input
+                                className="form-control shadow-none"
+                                type="text"
+                                {...register("user_id", { required: true, maxLength: 80 })}
+                                placeholder="User Id"
                             />
                         </div>
                         <div className="mb-2">

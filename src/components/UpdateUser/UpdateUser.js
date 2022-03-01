@@ -7,7 +7,7 @@ import swal from 'sweetalert';
 const UpdateUser = () => {
     const { userID } = useParams();
     const { register, handleSubmit } = useForm();
-    const [user, setUser] = useState({ name: '', email: '', mobile: '' });
+    const [user, setUser] = useState({ name: '', user_id: '', email: '', mobile: '' });
     useEffect(() => {
         fetch(`http://localhost:5000/users/${userID}`)
             .then(res => res.json())
@@ -32,17 +32,17 @@ const UpdateUser = () => {
     };
     const handleNameChange = e => {
         const updatedName = e.target.value;
-        const updatedUser = { name: updatedName, email: user.email, mobile: user.mobile }
+        const updatedUser = { name: updatedName, user_id: user.user_id, email: user.email, mobile: user.mobile }
         setUser(updatedUser)
     }
     const handleEmailChange = e => {
         const updatedEmail = e.target.value;
-        const updatedUser = { name: user.name, email: updatedEmail, mobile: user.mobile }
+        const updatedUser = { name: user.name, user_id: user.user_id, email: updatedEmail, mobile: user.mobile }
         setUser(updatedUser)
     }
     const handleMobileChange = e => {
         const updatedMobile = e.target.value;
-        const updatedUser = { name: user.name, email: user.email, mobile: updatedMobile }
+        const updatedUser = { name: user.name, user_id: user.user_id, email: user.email, mobile: updatedMobile }
         setUser(updatedUser)
     }
     return (
@@ -70,6 +70,7 @@ const UpdateUser = () => {
                                 onChange={handleNameChange}
                             />
                         </div>
+
                         <div className="mb-2">
                             <label className="mb-2">Email</label> <br />
                             <input
